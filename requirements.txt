@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+langgraph
+langchain-mcp-adapters
+langchain-google-genai
+google-generativeai
+pymongo
+python-dotenv
+langchain_openai
