@@ -1,4 +1,5 @@
-# ChatAppBackend
+# Mongodb MCP Agent with FastAPI Backend
+
 
 A FastAPI backend that connects LangGraph, MongoDB (via MCP), and OpenAI/LLM models to provide a chat interface for managing and summarizing todos.
 
