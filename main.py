@@ -1,21 +1,4 @@
 # main.py
-"""
-FastAPI ➜ LangGraph ➜ MongoDB MCP (stdio) with **Gemini-2.0-Flash**
-
-Install
--------
-pip install fastapi uvicorn langgraph langchain-mcp-adapters \
-            langchain-google-genai google-generativeai  # Gemini wrapper
-
-Environment
------------
-export GOOGLE_API_KEY=...
-export MONGODB_URI="mongodb://localhost:27017/?directConnection=true"
-
-Run
----
-uvicorn main:app --reload
-"""
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
