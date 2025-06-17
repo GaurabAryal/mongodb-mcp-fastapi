@@ -71,7 +71,7 @@ async def lifespan(app: FastAPI):
     #     google_api_key=os.environ.get("GOOGLE_API_KEY"),
     # )
     llm = ChatOpenAI(
-        model="gpt-3.5-turbo",
+        model="gpt-4.1",
         temperature=0.0,
         streaming=True,
         openai_api_key=os.environ.get("OPENAI_API_KEY"),
