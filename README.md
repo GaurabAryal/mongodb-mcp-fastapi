@@ -17,8 +17,8 @@ A FastAPI backend that connects LangGraph, MongoDB (via MCP), and OpenAI/LLM mod
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
-   cd ChatAppBackend
+   git clone https://github.com/GaurabAryal/mongodb-mcp-fastapi.git
+   cd mongodb-mcp-fastapi
    ```
 
 2. **Create and activate a virtual environment (recommended):**

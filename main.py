@@ -8,13 +8,15 @@ import logging
 from fastapi.responses import PlainTextResponse
 import re
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.prebuilt import create_react_agent
-from langchain_openai import ChatOpenAI  # Use OpenAI GPT-4o
+# from langchain_google_vertexai import ChatVertexAI  # Use Vertex AI
+from langchain_openai import ChatOpenAI  # Use OpenAI instead
 
 app = FastAPI()
-app.add_middleware(
+app.add_middleware( 
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -43,11 +45,10 @@ class ChatRequest(BaseModel):
     prompt: str
 
 
-@app.on_event("startup")
-async def startup() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     global agent, mcp_client
-
-    # 1️⃣  start MongoDB MCP server locally over stdio
+    # Startup logic
     mcp_client = MultiServerMCPClient(
         {
             "mongodb": {
@@ -62,24 +63,26 @@ async def startup() -> None:
             }
         }
     )
-
     tools = await mcp_client.get_tools()
-
-    # 2️⃣  GPT-4o LLM (OpenAI)
+    # llm = ChatVertexAI(
+    #     model="gemini-1.5-pro-latest",
+    #     temperature=0.0,
+    #     streaming=True,
+    #     google_api_key=os.environ.get("GOOGLE_API_KEY"),
+    # )
     llm = ChatOpenAI(
         model="gpt-4.1",
         temperature=0.0,
         streaming=True,
+        openai_api_key=os.environ.get("OPENAI_API_KEY"),
     )
-
-    # 3️⃣  build ReAct agent
     agent = create_react_agent(model=llm, tools=tools)
-
-
-@app.on_event("shutdown")
-async def shutdown() -> None:
+    yield
+    # Shutdown logic
     if mcp_client:
         await mcp_client.aclose()
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.post("/chat", response_class=PlainTextResponse)
